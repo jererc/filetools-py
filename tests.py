@@ -218,4 +218,4 @@ class TitleSearchTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main(catchbreak=True, verbosity=2)
+    unittest.main()
