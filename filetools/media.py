@@ -5,9 +5,11 @@ import shutil
 from stat import S_IMODE
 import mimetypes
 import filecmp
+import time
 import logging
 
 from lxml import html
+
 import pexpect
 
 from systools.system import popen
@@ -234,6 +236,29 @@ def rename_file(file, file_dst):
             logger.exception('exception')
             return file
     return file_dst
+
+def is_file_open(file, check_mtime=True, mtime_delta=5):
+    '''Return True if the file is open.
+    If file is a directory, recursively check all the files inside.
+
+    :param file: file or directory
+    :param check_mtime: check the file modified time
+    '''
+    if not os.path.exists(file):
+        return False
+    for file_ in iter_files(file):
+        if popen(['lsof', file_])[-1] == 0:
+            return True
+
+    if check_mtime:
+        def get_stat():
+            return dict([(f, os.stat(f).st_mtime) for f in iter_files(file)])
+        data0 = get_stat()
+        time.sleep(mtime_delta)
+        data1 = get_stat()
+        return data0 != data1
+
+    return False
 
 def is_duplicate(src, dst):
     '''Check if source is identical to destination.
