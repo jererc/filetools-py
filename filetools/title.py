@@ -193,7 +193,7 @@ def get_size(val):
     '''
     res = RE_SIZE.search(val)
     if not res:
-        logger.error('failed to get result size from "%s"', val)
+        logger.error('failed to get size from "%s"' % val)
         return
 
     size, unit = res.groups()
@@ -345,11 +345,11 @@ class Title(object):
             p_end = r'.*$'
         elif mode == '__all__':
             p_begin = r'(^|^.*[\W_])'
-            p_inside = r'[\W_s]*%s*[\W_]*([\W_](%s[\W_]+)*)*' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
+            p_inside = r'[\W_s]*%s*[\W_]*(%s[\W_]+)*' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
             p_end = r'([\W_].*$|$)'
         else:
             p_begin = r'^[\W_]*%s*[\W_]*(%s[\W_]+)*' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
-            p_inside = r'[\W_s]*%s*[\W_]*([\W_](%s[\W_]+)*)*' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
+            p_inside = r'[\W_s]*%s*[\W_]*(%s[\W_]+)*' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
             if self.episode:
                 p_end = r'([\W_].*$|$)'
             else:

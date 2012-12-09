@@ -151,6 +151,8 @@ class TitleSearchTest(unittest.TestCase):
         self.fixtures_tv = [
             ('show name', '.show.name.'),
             ('show name', 'the.show.name.'),
+            ('show name', 'the show\'s name'),
+            ('show name', 'the the show\'s and the names'),
             ('show name', 'SHOW NAME'),
             ('show name', 'show\'s name\'s'),
             ('show name 2011', 'show name 2011'),
