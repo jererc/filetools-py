@@ -151,7 +151,7 @@ def get_file_type(file):
         ext = os.path.splitext(file)[1].lower()
         if ext in ARCHIVE_DEF:
             return 'archive'
-        elif ext in ('.srt', '.ass',):
+        elif ext in ('.srt', '.ssa', '.sub'):
             return 'subtitles'
 
     file_type = mimetypes.guess_type(file)[0]
