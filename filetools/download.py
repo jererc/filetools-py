@@ -16,7 +16,7 @@ def downloads(path):
     '''Iterate processed downloads.
     '''
     if not os.path.exists(path):
-        logger.error('%s does not exist', path)
+        logger.error('%s does not exist' % path)
         return
 
     for file in media.iter_files(path, incl_dirs=True, recursive=False):
@@ -158,7 +158,7 @@ def check_download_file(file, finished_file=None, finished=False):
 
     if file.type == 'archive':
         if file.is_main_file() and file.is_protected():
-            logger.info('invalid archive %s: password protected', file.file)
+            logger.info('invalid archive %s: password protected' % file.file)
             return False
 
     elif file.type == 'video':
@@ -170,34 +170,34 @@ def check_download_file(file, finished_file=None, finished=False):
         # Check extension
         if ext in ('.wmv', '.asf'):
             if info['season'] and info['episode']:
-                logger.info('invalid extension "%s" for tvshow %s', ext, file.file)
+                logger.info('invalid extension "%s" for tvshow %s' % (ext, file.file))
                 return False
 
         # Check duration
         if info.get('duration'):
             if not 15 < info['duration'] / 60 < 180:
-                logger.info('invalid duration "%s" for %s', info['duration'], file.file)
+                logger.info('invalid duration "%s" for %s' % (info['duration'], file.file))
                 return False
         elif finished:
-            logger.info('failed to get duration for %s', file.file)
+            logger.info('failed to get duration for %s' % file.file)
             return False
 
         # Check bitrate
         if info.get('video_bitrate') and info.get('audio_bitrate'):
             if not 300 < info['video_bitrate'] / 1024 < 10000:
-                logger.info('invalid video bitrate "%s" for %s', info['video_bitrate'], file.file)
+                logger.info('invalid video bitrate "%s" for %s' % (info['video_bitrate'], file.file))
                 return False
             if not 30 < info['audio_bitrate'] / 1024 < 1000:
-                logger.info('invalid audio bitrate "%s" for %s', info['video_bitrate'], file.file)
+                logger.info('invalid audio bitrate "%s" for %s' % (info['video_bitrate'], file.file))
                 return False
 
         elif info.get('bitrate'):
             if not 300 < info['bitrate'] / 1024 < 10000:
-                logger.info('invalid bitrate "%s" for %s', info['bitrate'], file.file)
+                logger.info('invalid bitrate "%s" for %s' % (info['bitrate'], file.file))
                 return False
 
         elif finished:
-            logger.info('failed to get bitrate for %s', file.file)
+            logger.info('failed to get bitrate for %s' % file.file)
             return False
 
     return True

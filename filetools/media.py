@@ -54,7 +54,7 @@ def iter_files(path_root, incl_files=True, incl_dirs=False, topdown=False, recur
     '''Iterate files in the root path.
     '''
     if not os.path.exists(path_root):
-        logger.error('%s does not exist', path_root)
+        logger.error('%s does not exist' % path_root)
     elif os.path.isfile(path_root):
         if incl_files:
             yield path_root
@@ -96,7 +96,7 @@ def files(path_root, re_file=None, re_path=None, re_filename=None, re_ext=None,
     '''Iterate files and yield File objects according to the file type.
     '''
     if not os.path.exists(path_root):
-        logger.error('%s does not exist', path_root)
+        logger.error('%s does not exist' % path_root)
     else:
         for file in iter_files(path_root, incl_files=incl_files,
                 incl_dirs=incl_dirs, topdown=topdown, recursive=recursive):
@@ -288,7 +288,7 @@ def move_file(src, path_dst):
         try:
             os.makedirs(path_dst)
         except Exception:
-            logger.exception('failed to create %s', path_dst)
+            logger.exception('failed to create %s' % path_dst)
             return
 
     dst = os.path.join(path_dst, os.path.basename(src))
@@ -540,7 +540,7 @@ class Archive(File):
             if res == 0:
                 return True
             elif res == 1:
-                logger.error('command "%s" timed out', cmd)
+                logger.error('command "%s" timed out' % cmd)
         except pexpect.ExceptionPexpect:
             pass
         finally:
@@ -586,10 +586,10 @@ class Archive(File):
             if remove_failed and ext in RE_EXTRACT_ERRORS:
                 if [l for l in stderr if RE_EXTRACT_ERRORS[ext].search(l)]:
                     remove_src = True
-                    logger.info('failed to extract %s: bad archive', self.file)
+                    logger.info('failed to extract %s: bad archive' % self.file)
                 else:
                     remove_src = False
-                    logger.error('failed to extract %s: %s, %s', self.file, stdout, stderr)
+                    logger.error('failed to extract %s: %s, %s' % (self.file, stdout, stderr))
 
         processed = self.get_multipart_files()
 
