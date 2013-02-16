@@ -351,6 +351,7 @@ def is_html(data):
 #
 
 class File(object):
+
     def __init__(self, file, real_file=None):
         self.file = file
         self.type = get_type(file)

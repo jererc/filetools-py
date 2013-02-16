@@ -100,6 +100,8 @@ class TitleTvTest(unittest.TestCase):
                 'show name', '', '2', '', ' HDTV XviD TEAM', '', '2'),
             ('show name part2 HDTV XviD TEAM',
                 'show name', '', '2', '', ' HDTV XviD TEAM', '', '2'),
+            ('show name 2013 s01e03 HDTV XviD TEAM',
+                'show name 2013', '1', '03', '', ' HDTV XviD TEAM', '1', '03'),
 
             ('anime name 002',
                 'anime name', '', '02', '002', '', '', '002'),
@@ -164,6 +166,7 @@ class TitleSearchTest(unittest.TestCase):
             ('show name 1x23', 'show name s01e23-24 episode title'),
             ('show name 78 1x23', 'show name 78 s01e23 episode title'),
             ('show name 23 1x23', 'show name 23 s01e23 episode title'),
+            ('show name 1x23', 'show name 2013 s01e23 episode title'),
 
             ('anime name 123', '[TEAM]_Anime_Name-123_[COMMENT]'),
             ('anime name 123', '[TEAM]_Anime_Name-0123_[COMMENT]'),

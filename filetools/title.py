@@ -208,6 +208,7 @@ def get_size(val):
 
 
 class Title(object):
+
     DEFAULTS = {
         'full_name': '',
         'name': '',
@@ -323,22 +324,9 @@ class Title(object):
         season = str(season).zfill(len(self.season))
         return season, episode
 
-    def get_search_re(self, mode=None):
-        '''Get a search regex from a query.
-
-        :param mode: search mode:
-            - None: exact match
-            - __all__: match phrase and other words
-            - __lazy__: match all words without boundaries
-
-        :return: compiled regex
+    def _get_separator_patterns(self, mode):
+        '''Get words separators patterns.
         '''
-        if self.episode:
-            title = '%s %s%s' % (self.name, '%s ' % self.season if self.season else '', self.episode)
-        else:
-            title = self.title
-
-        # Get words separators patterns
         if mode == '__lazy__':
             p_begin = r'^.*'
             p_inside = r'.*'
@@ -355,19 +343,42 @@ class Title(object):
             else:
                 p_end = r'[\W_s]*%s*[\W_]*([\W_]%s)*[\W_]*$' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
 
+        return p_begin, p_inside, p_end
+
+    def get_search_pattern(self, mode=None):
+        '''Get a search regex pattern from a query.
+
+        :param mode: search mode, possible values:
+            - None: exact match
+            - __all__: match phrase and other words
+            - __lazy__: match all words without boundaries
+
+        :return: pattern
+        '''
+        if self.episode:
+            title = '%s %s%s' % (self.name, '%s ' % self.season if self.season else '', self.episode)
+        else:
+            title = self.title
+
+        p_begin, p_inside, p_end = self._get_separator_patterns(mode)
+
         words = [w for w in re.split(r'[\W_]+', title.lower()) if w not in LIST_JUNK_SEARCH]
         pattern = p_inside.join(words)
         pattern = re.sub(r's(%s|$)' % re.escape(p_inside), r"'?s?\1", pattern)
 
         if self.episode:
             s_prev, e_prev = self._get_prev_episode()
+            p_year = '(\d{4})?%s' % p_inside
             if self.season:
                 pattern = re.sub(r'(0?%s)%s(%s)' % (self.season, re.escape(p_inside), self.episode),
-                        r'([^1-9]{,3}%s\D*%s\D[^1-9]*\1?\D*\2|[^1-9]{,3}\1\D*\2)' % (s_prev, e_prev),
+                        r'%s([^1-9]{,3}%s\D*%s\D[^1-9]*\1?\D*\2|[^1-9]{,3}\1\D*\2)' % (p_year, s_prev, e_prev),
                         pattern)
             else:
                 pattern = re.sub(r'(%s)(%s)' % (re.escape(p_inside), self.episode),
-                        r'\1([^1-9]{,3}%s[^1-9]{,3}\2|[^1-9]{,3}\2)' % e_prev,
+                        r'%s\1([^1-9]{,3}%s[^1-9]{,3}\2|[^1-9]{,3}\2)' % (p_year, e_prev),
                         pattern)
 
-        return re.compile(r'%s%s%s' % (p_begin, pattern, p_end), re.I)
+        return r'%s%s%s' % (p_begin, pattern, p_end)
+
+    def get_search_re(self, mode=None):
+        return re.compile(self.get_search_pattern(mode), re.I)
