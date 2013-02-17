@@ -324,7 +324,7 @@ class Title(object):
         season = str(season).zfill(len(self.season))
         return season, episode
 
-    def _get_separator_patterns(self, mode):
+    def _get_separator_patterns(self, mode, category=None):
         '''Get words separators patterns.
         '''
         if mode == '__lazy__':
@@ -338,14 +338,14 @@ class Title(object):
         else:
             p_begin = r'^[\W_]*%s*[\W_]*(%s[\W_]+)*' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
             p_inside = r'[\W_s]*%s*[\W_]*(%s[\W_]+)*' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
-            if self.episode:
+            if self.episode or category == 'tv':
                 p_end = r'([\W_].*$|$)'
             else:
                 p_end = r'[\W_s]*%s*[\W_]*([\W_]%s)*[\W_]*$' % (PATTERN_SEP_EXTRA, PATTERN_SEP_JUNK)
 
         return p_begin, p_inside, p_end
 
-    def get_search_pattern(self, mode=None):
+    def get_search_pattern(self, mode=None, category=None):
         '''Get a search regex pattern from a query.
 
         :param mode: search mode, possible values:
@@ -360,7 +360,7 @@ class Title(object):
         else:
             title = self.title
 
-        p_begin, p_inside, p_end = self._get_separator_patterns(mode)
+        p_begin, p_inside, p_end = self._get_separator_patterns(mode, category)
 
         words = [w for w in re.split(r'[\W_]+', title.lower()) if w not in LIST_JUNK_SEARCH]
         pattern = p_inside.join(words)
@@ -380,5 +380,6 @@ class Title(object):
 
         return r'%s%s%s' % (p_begin, pattern, p_end)
 
-    def get_search_re(self, mode=None):
-        return re.compile(self.get_search_pattern(mode), re.I)
+    def get_search_re(self, mode=None, category=None):
+        pattern = self.get_search_pattern(mode, category)
+        return re.compile(pattern, re.I)
