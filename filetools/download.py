@@ -175,7 +175,7 @@ def check_download_file(file, finished_file=None, finished=False):
 
         # Check duration
         if info.get('duration'):
-            if not 15 < info['duration'] / 60 < 180:
+            if not 15 < info['duration'] / 60 < 240:
                 logger.info('invalid duration "%s" for %s' % (info['duration'], file.file))
                 return False
         elif finished:
@@ -188,7 +188,7 @@ def check_download_file(file, finished_file=None, finished=False):
                 logger.info('invalid video bitrate "%s" for %s' % (info['video_bitrate'], file.file))
                 return False
             if not 30 < info['audio_bitrate'] / 1024 < 1000:
-                logger.info('invalid audio bitrate "%s" for %s' % (info['video_bitrate'], file.file))
+                logger.info('invalid audio bitrate "%s" for %s' % (info['audio_bitrate'], file.file))
                 return False
 
         elif info.get('bitrate'):

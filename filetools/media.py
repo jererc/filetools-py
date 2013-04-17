@@ -389,7 +389,7 @@ class Media(File):
                 continue
 
             name_ = file.get_file_info().get('display_name')
-            if not name_ or name_ != name:
+            if not name_ or clean(name_, 9) != clean(name, 9):
                 if file.type == self.type == 'video' and get_size(file.file) < size_limit:
                     continue
                 return True

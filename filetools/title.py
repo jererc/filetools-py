@@ -181,9 +181,6 @@ def get_year(val):
         if is_year(word):
             return int(word)
 
-def get_capitalized(val):
-    return ' '.join([w.capitalize() for w in val.split()])
-
 def is_url(val):
     if urlparse(val).scheme:
         return True
