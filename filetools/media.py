@@ -415,8 +415,9 @@ class Video(Media):
 
         # Get title info using parent directory name and its parent's name
         title = Title(self.filename, [self.dir, os.path.basename(os.path.dirname(self.path))])
-        for attr in ('full_name', 'display_name', 'name', 'season', 'episode', 'date', 'rip', 'langs'):
-            info[attr] = getattr(title, attr)
+        for key in ('full_name', 'display_name', 'name',
+                'season', 'episode', 'date', 'rip', 'langs'):
+            info[key] = getattr(title, key)
 
         if info['episode'] and (RE_TVSHOW_CHECK.search(self.filename) or check_size(self.file, size_max=SIZE_TVSHOW_MAX)):
             info['subtype'] = 'tv'
@@ -496,8 +497,9 @@ class Subtitles(File):
             pass
 
         title = Title(self.filename, self.dir)
-        for attr in ('full_name', 'display_name', 'name', 'season', 'episode', 'date'):
-            info[attr] = getattr(title, attr)
+        for key in ('full_name', 'display_name', 'name',
+                'season', 'episode', 'date'):
+            info[key] = getattr(title, key)
 
         return info
 
