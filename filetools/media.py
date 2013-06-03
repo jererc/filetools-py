@@ -6,6 +6,8 @@ from stat import S_IMODE
 import mimetypes
 import filecmp
 import time
+import tempfile
+from contextlib import contextmanager
 import logging
 
 from lxml import html
@@ -119,6 +121,14 @@ def files(path_root, re_file=None, re_path=None, re_filename=None, re_ext=None,
                 continue
             yield res
 
+@contextmanager
+def mkdtemp(path, prefix='tmp_'):
+    temp_dir = tempfile.mkdtemp(prefix=prefix, dir=path)
+    try:
+        yield temp_dir
+    finally:
+        shutil.rmtree(temp_dir)
+
 def fsplit(file):
     '''Get the path, filename (without path and extension) and extension of a file.
 
@@ -133,10 +143,7 @@ def fsplit(file):
 def get_size(file):
     '''Get file size (KB).
     '''
-    try:
-        return os.stat(file).st_size / 1024.0
-    except Exception:
-        pass
+    return os.stat(file).st_size / 1024.0
 
 def check_size(file, size_min=None, size_max=None):
     '''Check file size (MB).

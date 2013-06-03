@@ -4,7 +4,7 @@ import logging
 
 from mock import patch, Mock
 
-from filetools.title import Title, clean, get_episode_info
+from filetools.title import Title, clean, get_episode_info, get_size
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -220,6 +220,30 @@ class TitleSearchTest(unittest.TestCase):
             res = Title(query).get_search_re(mode='__all__')
 
             self.assertFalse(res.search(title), '"%s" (%s) should not match "%s"' % (query, res.pattern, title))
+
+
+class SizeTest(unittest.TestCase):
+
+    def setUp(self):
+        self.fixtures = [
+            ('123', 123.0 / 1024 / 1024),
+            ('123 B', 123.0 / 1024 / 1024),
+            ('-123 B', 123.0 / 1024 / 1024),
+            ('123 KiB', 123.0 / 1024),
+            ('123 KB', 123.0 / 1024),
+            ('123 K', 123.0 / 1024),
+            ('123 MiB', 123),
+            ('123 MB', 123),
+            ('123 M', 123),
+            ('123 GiB', 123 * 1024),
+            ('123 GB', 123 * 1024),
+            ('123 G', 123 * 1024),
+            ]
+
+    def test_size(self):
+        for val, expected in self.fixtures:
+            res = get_size(val)
+            self.assertEqual(res, expected)
 
 
 if __name__ == '__main__':

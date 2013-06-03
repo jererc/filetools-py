@@ -15,7 +15,7 @@ RE_EPISODE_LIST = [
     re.compile(r'\b(()(\d{1,2}))\b', re.I),
     ]
 RE_AUDIO = re.compile(r'^((.*?)[\W_]*-[\W_]*(.*)|(\d{2,3})[\W_]*-[\W_]*(.*?)[\W_]*-[\W_]*(.*))$', re.I)
-RE_SIZE = re.compile(r'^([\d\.]+)\W*\s*([gmk])?i?b?\s*$', re.I)
+RE_SIZE = re.compile(r'([\d\.]+)\W*([gmk])?i?b?\s*$', re.I)
 LIST_JUNK_SEARCH = ['the', 'a', 'and', 's', 'le', 'la', 'un', 'une', 'us']
 PATTERN_SEP_EXTRA = '([\(\[][^\)\]]*[\)\]])'
 PATTERN_SEP_JUNK = '(%s)' % '|'.join(LIST_JUNK_SEARCH)
