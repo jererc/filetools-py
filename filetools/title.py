@@ -12,10 +12,10 @@ RE_EPISODE_LIST = [
     re.compile(r'\b(s?(\d{1,2})[ex](\d{2}))\b', re.I),
     re.compile(r'\b((\d{1,2})(\d{2}))\b', re.I),
     re.compile(r'\b(()part[\W_]*(\d+))\b', re.I),
-    re.compile(r'\b(()(\d{1,2}))\b', re.I),
+    re.compile(r'\D(()(\d{1,2}))\b', re.I),
     ]
 RE_AUDIO = re.compile(r'^((.*?)[\W_]*-[\W_]*(.*)|(\d{2,3})[\W_]*-[\W_]*(.*?)[\W_]*-[\W_]*(.*))$', re.I)
-RE_SIZE = re.compile(r'([\d\.]+)\W*([gmk])?i?b?\s*$', re.I)
+RE_SIZE = re.compile(r'([\d\.]+)\W*([tgmk])?i?b?\s*$', re.I)
 LIST_JUNK_SEARCH = ['the', 'a', 'and', 's', 'le', 'la', 'un', 'une', 'us']
 PATTERN_SEP_EXTRA = '([\(\[][^\)\]]*[\)\]])'
 PATTERN_SEP_JUNK = '(%s)' % '|'.join(LIST_JUNK_SEARCH)
@@ -137,12 +137,10 @@ def get_episode_info(title):
         return name, season, episode, episode_alt, extra
 
 def is_tv(title):
-    if re.compile(PATTERN_RIP_TV, re.I).search(title):
-        return True
+    return re.compile(PATTERN_RIP_TV, re.I).search(title) is not None
 
 def is_movies(title):
-    if re.compile(PATTERN_RIP_MOVIES, re.I).search(title):
-        return True
+    return re.compile(PATTERN_RIP_MOVIES, re.I).search(title) is not None
 
 def get_rip(val):
     '''Get the rip info from a title.
@@ -201,6 +199,8 @@ def get_size(val):
         size /= 1024
     elif unit.lower() == 'g':
         size *= 1024
+    elif unit.lower() == 't':
+        size *= (1024 * 1024)
     return size
 
 

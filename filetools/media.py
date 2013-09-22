@@ -322,8 +322,8 @@ def remove_file(file):
                 os.remove(file)
             else:
                 shutil.rmtree(file)
-        except OSError:
-            logger.exception('exception')
+        except Exception:
+            logger.exception('failed to remove "%s"' % file)
             return
     return True
 

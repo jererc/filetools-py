@@ -36,7 +36,7 @@ def unpack_download(download, passes=UNPACK_PASSES):
     download = media.clean_file(download, strip_extra=True)
     if os.path.isfile(download):
         # Move file into a directory
-        path_dst = os.path.splitext(download)[0]
+        path_dst = media.get_unique(os.path.splitext(download)[0])
         path, filename, ext = media.fsplit(download)
         file_dst = media.rename_file(download,
                 os.path.join(path_dst, filename + ext))

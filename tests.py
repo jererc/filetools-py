@@ -51,6 +51,8 @@ class TitleMovieTest(unittest.TestCase):
                 '4 44 last day on earth', '', '', '', '.VODRiP.XViD.AC3-MAJESTiC'),
             ('movie name 312 LIMITED BDRip XviD TEAM',
                 'movie name 312', '', '', '', ' LIMITED BDRip XviD TEAM'),
+            ('11 flowers',
+                '11 flowers', '', '', '', ''),
             ]
 
     def test_episode_info(self):
