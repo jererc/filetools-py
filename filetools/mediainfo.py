@@ -20,7 +20,7 @@ def parse(file):
     if return_code is None:
         raise MediainfoError('failed to run command "%s"' % ' '.join(cmd))
     elif return_code != 0:
-        logger.error('failed to parse file %s: %s, %s' % (file, stdout, stderr))
+        logger.error('failed to parse file %s: %s, %s', file, stdout, stderr)
         return res
 
     cat = None

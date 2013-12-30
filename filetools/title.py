@@ -188,7 +188,7 @@ def get_size(val):
     '''
     res = RE_SIZE.search(val)
     if not res:
-        logger.error('failed to get size from "%s"' % val)
+        logger.error('failed to get size from "%s"', val)
         return
 
     size, unit = res.groups()
