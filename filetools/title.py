@@ -37,6 +37,7 @@ PATTERNS_LANGS = {
     'ar': r'(subs?)?arab(ic)?([\W_]*subs?(titles)?)?',
     }
 LANG_DEFAULT = 'en'     # default language when none found
+SEARCH_MODE_MIN_CHARS = 6
 
 logger = logging.getLogger(__name__)
 
@@ -203,6 +204,9 @@ def get_size(val):
         size *= (1024 * 1024)
     return size
 
+def get_words(val):
+    return [w for w in re.split(r'[\W_]+', val.lower()) if w not in LIST_JUNK_SEARCH]
+
 
 class Title(object):
 
@@ -321,6 +325,13 @@ class Title(object):
         season = str(season).zfill(len(self.season))
         return season, episode
 
+    def _get_search_mode(self, min_chars=SEARCH_MODE_MIN_CHARS):
+        words = get_words(self.title)
+        chars_count = len(''.join(words))
+        if chars_count >= min_chars:
+            return '__all__'
+        return None
+
     def _get_separator_patterns(self, mode, category=None):
         '''Get words separators patterns.
         '''
@@ -342,7 +353,7 @@ class Title(object):
 
         return p_begin, p_inside, p_end
 
-    def get_search_pattern(self, mode=None, category=None):
+    def get_search_pattern(self, mode=None, category=None, auto=False):
         '''Get a search regex pattern from a query.
 
         :param mode: search mode, possible values:
@@ -352,6 +363,9 @@ class Title(object):
 
         :return: pattern
         '''
+        if auto:
+            mode = self._get_search_mode()
+
         if self.episode:
             title = '%s %s%s' % (self.name, '%s ' % self.season if self.season else '', self.episode)
         else:
@@ -359,8 +373,7 @@ class Title(object):
 
         p_begin, p_inside, p_end = self._get_separator_patterns(mode, category)
 
-        words = [w for w in re.split(r'[\W_]+', title.lower()) if w not in LIST_JUNK_SEARCH]
-        pattern = p_inside.join(words)
+        pattern = p_inside.join(get_words(title))
         pattern = re.sub(r's(%s|$)' % re.escape(p_inside), r"'?s?\1", pattern)
 
         if self.episode:
@@ -377,6 +390,6 @@ class Title(object):
 
         return r'%s%s%s' % (p_begin, pattern, p_end)
 
-    def get_search_re(self, mode=None, category=None):
-        pattern = self.get_search_pattern(mode, category)
+    def get_search_re(self, mode=None, category=None, auto=False):
+        pattern = self.get_search_pattern(mode, category=category, auto=auto)
         return re.compile(pattern, re.I)
