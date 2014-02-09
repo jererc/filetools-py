@@ -37,7 +37,7 @@ PATTERNS_LANGS = {
     'ar': r'(subs?)?arab(ic)?([\W_]*subs?(titles)?)?',
     }
 LANG_DEFAULT = 'en'     # default language when none found
-SEARCH_MODE_MIN_CHARS = 6
+SEARCH_MODE_MIN_CHARS = 8
 
 logger = logging.getLogger(__name__)
 

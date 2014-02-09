@@ -33,6 +33,7 @@ SIZE_TVSHOW_MAX = 600   # for tvshow detection (MB)
 ARCHIVE_DEF = {
     '.zip': ['unzip', '-o'],    # overwrite files
     '.rar': ['unrar', 'x', '-yo+', '-p-'],  # assume yes to all questions, overwrite files, do not query password
+    '.7z': ['7za', 'x', '-y'],  # assume yes to all questions
     # '.ace': ['unace', 'x', '-y'], # assume yes to all questions
     }
 RE_RAR_PASSWORD = re.compile(r'\bEnter password.*for.*:\W*', re.I)
